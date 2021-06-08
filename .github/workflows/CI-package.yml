@@ -1,6 +1,6 @@
 # This file wont do us much good in this location, make sure you change the path as directed to continue!
 
-name: Docket CI and packaging
+name: Docket CI and de
 
 on:
   pull_request:
@@ -99,4 +99,3 @@ jobs:
       - name: Azure logout
         run: |
           az logout
-
