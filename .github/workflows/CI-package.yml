@@ -5,6 +5,10 @@ name: Docket CI and package
 on:
   pull_request:
 
+env:
+  REPO_NAME: DevOp-With-Github/nodejs-containerized-webapp
+  IMAGE_REGISTRY_URL: docker.pkg.github.com
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -62,7 +66,7 @@ jobs:
       with:
         username: ${{github.actor}}
         password: ${{secrets.GITHUB_TOKEN}}
-        registry: docker.pkg.github.com
-        repository: kietnhitran/github-actions-for-packages/tic-tac-toe
+        registry: ${{env.IMAGE_REGISTRY_URL}}
+        repository: ${{env.REPO_NAME}}/tic-tac-toe
         tag_with_sha: true
 
