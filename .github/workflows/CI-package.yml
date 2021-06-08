@@ -6,7 +6,7 @@ on:
   pull_request:
 
 env:
-  REPO_NAME: kietnhitran/devop-with-github/nodejs-containerized-webapp
+  REPO_NAME: devop-with-github/devop-with-github/nodejs-containerized-webapp
   IMAGE_REGISTRY_URL: docker.pkg.github.com
 
 jobs:
