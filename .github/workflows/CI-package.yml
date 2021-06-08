@@ -4,10 +4,13 @@ name: Docket CI and packaging
 
 on:
   pull_request:
+    paths-ignore: 
+      - 'infra/**'
 
 env:
   REPO_NAME: devop-with-github/nodejs-containerized-webapp
   IMAGE_REGISTRY_URL: docker.pkg.github.com
+  AZURE_WEBAPP_NAME: tic-tac-toe
 
 jobs:
   build:
@@ -61,12 +64,41 @@ jobs:
       with:
         name: webpack artifacts
         path: public
+    - name: Set deployment env
+      if: ! ${{ github.ref == 'refs/heads/main' }}
+      run: echo "DEPLOY_END=dev" >> $GITHUB_ENV
     - name: Build container image
       uses: docker/build-push-action@v1
       with:
         username: ${{github.actor}}
         password: ${{secrets.GITHUB_TOKEN}}
         registry: ${{env.IMAGE_REGISTRY_URL}}
-        repository: ${{env.REPO_NAME}}/tic-tac-toe
+        repository: ${{env.REPO_NAME}}/${{env.DEPLOY_END}}-${{ env.AZURE_WEBAPP_NAME }}
         tag_with_sha: true
+  
+  Deploy-to-dev:
+    runs-on: ubuntu-latest
+    needs: Build-and-Push-Docker-Image
+    name: Deploy app container to Azure
+    steps:
+      - name: "Login via Azure CLI"
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - uses: azure/docker-login@v1
+        with:
+          login-server: ${{env.IMAGE_REGISTRY_URL}}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Deploy web app container
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{env.AZURE_WEBAPP_NAME}}
+          images: ${{env.IMAGE_REGISTRY_URL}}/${{ env.REPO_NAME}}/${{env.DEPLOY_END}}-${{ env.AZURE_WEBAPP_NAME }}:${{ github.sha }}
+
+      - name: Azure logout
+        run: |
+          az logout
 
