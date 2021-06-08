@@ -51,17 +51,10 @@ jobs:
           npm test
         env:
           CI: true
-          
-  envcheck:
-    runs-on: ubuntu-latest
-    if: ${{ github.ref == 'refs/heads/main' }}
-    steps:
-      - name: Set deployment env
-        run: echo "DEPLOY_END=prod" >> $GITHUB_ENV
     
   Build-and-Push-Docker-Image:
     runs-on: ubuntu-latest
-    needs: [test, envcheck]
+    needs: [test]
     name: Docker Build, Tag, Push
 
     steps:
