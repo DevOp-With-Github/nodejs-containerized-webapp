@@ -1,0 +1,9 @@
+name: spinup env
+
+on:
+  workflow_dispatch:
+  inputs:
+    deploy_to:
+      description: 'env to deploy'
+      required: true
+
