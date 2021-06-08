@@ -3,8 +3,8 @@
 name: Docket CI and package
 
 on:
-  pull-request:
-  
+  pull_request:
+
 jobs:
   build:
     runs-on: ubuntu-latest
