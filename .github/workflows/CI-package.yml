@@ -11,6 +11,7 @@ env:
   REPO_NAME: devop-with-github/nodejs-containerized-webapp
   IMAGE_REGISTRY_URL: docker.pkg.github.com
   AZURE_WEBAPP_NAME: tic-tac-toe
+  DEPLOY_END: dev
 
 jobs:
   build:
@@ -50,10 +51,17 @@ jobs:
           npm test
         env:
           CI: true
-  
+          
+  envcheck:
+    runs-on: ubuntu-latest
+    if: ${{ github.ref == 'refs/heads/main' }}
+    steps:
+      - name: Set deployment env
+        run: echo "DEPLOY_END=prod" >> $GITHUB_ENV
+    
   Build-and-Push-Docker-Image:
     runs-on: ubuntu-latest
-    needs: test
+    needs: [test, envcheck]
     name: Docker Build, Tag, Push
 
     steps:
@@ -64,9 +72,6 @@ jobs:
       with:
         name: webpack artifacts
         path: public
-    - name: Set deployment env
-      if: ! ${{ github.ref == 'refs/heads/main' }}
-      run: echo "DEPLOY_END=dev" >> $GITHUB_ENV
     - name: Build container image
       uses: docker/build-push-action@v1
       with:
@@ -76,7 +81,7 @@ jobs:
         repository: ${{env.REPO_NAME}}/${{env.DEPLOY_END}}-${{ env.AZURE_WEBAPP_NAME }}
         tag_with_sha: true
   
-  Deploy-to-dev:
+  Deploy:
     runs-on: ubuntu-latest
     needs: Build-and-Push-Docker-Image
     name: Deploy app container to Azure
