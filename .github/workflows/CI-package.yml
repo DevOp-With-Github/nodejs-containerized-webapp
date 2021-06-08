@@ -1,10 +1,9 @@
 # This file wont do us much good in this location, make sure you change the path as directed to continue!
 
-name: Docket CI and package
+name: Docket CI and packaging
 
 on:
   pull_request:
-    paths: '**'
 
 env:
   REPO_NAME: devop-with-github/nodejs-containerized-webapp
