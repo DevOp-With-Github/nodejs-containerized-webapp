@@ -1,0 +1,8 @@
+name: spinup infrastruture
+
+on:
+  workflow_dispatch:
+    inputs:
+      deploy_to:
+        description: 'Environment to spinup'
+        required: true
