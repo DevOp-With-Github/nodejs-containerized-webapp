@@ -72,7 +72,7 @@ jobs:
         password: ${{secrets.GITHUB_TOKEN}}
         registry: ${{env.IMAGE_REGISTRY_URL}}
         repository: ${{env.REPO_NAME}}/${{env.DEPLOY_END}}-${{ env.AZURE_WEBAPP_NAME }}
-        tag_with_sha: true
+        tags: ${{ github.sha }}
   
   Deploy:
     runs-on: ubuntu-latest
