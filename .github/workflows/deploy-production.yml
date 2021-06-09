@@ -6,7 +6,9 @@ on:
       commit-sha:
         description: 'hash of package we want to deploy'
         required: true
-
+      package-name:
+        description: 'name of the package'
+        required: true
       
 env:
   REPO_NAME: devop-with-github/nodejs-containerized-webapp
@@ -35,7 +37,7 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{env.DEPLOY_END}}-${{env.AZURE_WEBAPP_NAME}}
-          images: ${{env.IMAGE_REGISTRY_URL}}/${{ env.REPO_NAME}}/${{env.DEPLOY_END}}-${{ env.AZURE_WEBAPP_NAME }}:${{ github.sha }}
+          images: ${{env.IMAGE_REGISTRY_URL}}/${{ env.REPO_NAME}}/${{ github.event.inputs.package-name }}:${{ github.event.inputs.commit-sha }}
 
       - name: Azure logout
         run: |
