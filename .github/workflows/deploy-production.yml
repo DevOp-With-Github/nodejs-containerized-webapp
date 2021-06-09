@@ -6,6 +6,7 @@ on:
       - main
       
 jobs:
-  - name: init
+  hello-world:
+    runs-on: ubuntu-latest
     steps:
-      - rum: echo 'hello world'
+      - run: echo 'hello world'
