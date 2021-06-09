@@ -18,7 +18,6 @@ env:
 
 jobs:
   Deploy:
-    if: ${{ github.ref != 'refs/heads/main' }}
     runs-on: ubuntu-latest
     name: Deploy app container to Prod Azure
     steps:
