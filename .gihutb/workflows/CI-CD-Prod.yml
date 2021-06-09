@@ -1,0 +1,11 @@
+name: Docker CI & CD Prod
+
+on:
+  push:
+    branches:
+      - main
+      
+jobs:
+  - name: init
+    steps:
+      - rum: echo 'hello world'
