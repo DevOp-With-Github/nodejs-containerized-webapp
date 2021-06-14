@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+      - IaaC
     paths:
       - 'infra/**'
       
