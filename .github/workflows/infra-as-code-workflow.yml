@@ -36,12 +36,12 @@ jobs:
         echo "prod group $prodRgExisted"
       
     - name: create dev group if it deoes not exist
-      if: ${{steps.if_group_exists.output.isDevGroupExisted == 'false' }}
+      if: ${{steps.if_group_exists.outputs.isDevGroupExisted == 'false' }}
       run: |
         az group create --location ${{env.AZURE_LOCATION}} --name dev-${{env.AZURE_RESOURCE_GROUP}} --subscription ${{secrets.AZURE_SUBSCRIPTION_ID}}
 
     - name: create prod group if it deoes not exist
-      if: ${{steps.if_group_exists.output.isProdGroupExisted == 'false' }}
+      if: ${{steps.if_group_exists.outputs.isProdGroupExisted == 'false' }}
       run: |
         az group create --location ${{env.AZURE_LOCATION}} --name prod-${{env.AZURE_RESOURCE_GROUP}} --subscription ${{secrets.AZURE_SUBSCRIPTION_ID}}
         
