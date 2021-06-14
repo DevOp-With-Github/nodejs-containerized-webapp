@@ -6,6 +6,7 @@ param acrServerURL string = ' https://docker.pkg.github.com'
 param dockerUsername string
 param dockerUserPassword string
 
+
 var websiteName = name
 
 resource site 'microsoft.web/sites@2020-06-01' = {
