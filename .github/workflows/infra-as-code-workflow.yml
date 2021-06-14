@@ -28,8 +28,8 @@ jobs:
         
     - name: if_group_exists
       run: |
-        devRgExisted=$(az group create --location ${{env.AZURE_LOCATION}} --name dev-${{env.AZURE_RESOURCE_GROUP}} --subscription ${{secrets.AZURE_SUBSCRIPTION_ID}})
-        prodRgExisted=$(az group create --location ${{env.AZURE_LOCATION}} --name prod-${{env.AZURE_RESOURCE_GROUP}} --subscription ${{secrets.AZURE_SUBSCRIPTION_ID}})
+        devRgExisted=$(az group exists --name dev-${{env.AZURE_RESOURCE_GROUP}} --subscription ${{secrets.AZURE_SUBSCRIPTION_ID}})
+        prodRgExisted=$(az group exists --name prod-${{env.AZURE_RESOURCE_GROUP}} --subscription ${{secrets.AZURE_SUBSCRIPTION_ID}})
         echo "::set-output name=isDevGroupExisted::$devRgExisted\n"
         echo "::set-output name=isProdGroupExisted::$prodRgExisted\n"
       
@@ -50,7 +50,7 @@ jobs:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
         resourceGroupName: dev-${{env.AZURE_RESOURCE_GROUP}}
         template: ./azuredeploy.bicep
-        parameters: storagePrefix=mystore
+        parameters: envprefix=dev anotherparam=test
 
     - name: deploy prod
       uses: azure/arm-deploy@v1
@@ -58,4 +58,4 @@ jobs:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
         resourceGroupName: prod-${{env.AZURE_RESOURCE_GROUP}}
         template: ./azuredeploy.bicep
-        parameters: storagePrefix=mystore
+        parameters: envprefix=prod anotherparam=test
