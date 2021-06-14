@@ -39,5 +39,5 @@ jobs:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
         resourceGroupName: dev-${{env.AZURE_RESOURCE_GROUP}}
         template: ./infra/azuredeploy.bicep
-        parameters: envprefix=deviaac
+        parameters: envprefix=deviaac dockerUserPassword=${{secrets.GITHUB_TOKEN}} dockerUsername=${{github.actor}}
 
