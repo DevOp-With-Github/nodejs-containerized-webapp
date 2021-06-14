@@ -9,6 +9,7 @@ on:
       
 env:
   AZURE_RESOURCE_GROUP: cd-with-actions
+  AZURE_LOCATION: '"Central US"'
 
 jobs:
   build-and-deploy:
@@ -22,12 +23,37 @@ jobs:
     - uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+    - name: if_group_exists
+      run: |
+        devRgExisted=$(az group create --location ${{env.AZURE_LOCATION}} --name dev-${{env.AZURE_RESOURCE_GROUP}} --subscription ${{secrets.AZURE_SUBSCRIPTION_ID}})
+        prodRgExisted=$(az group create --location ${{env.AZURE_LOCATION}} --name prod-${{env.AZURE_RESOURCE_GROUP}} --subscription ${{secrets.AZURE_SUBSCRIPTION_ID}})
+        echo "::set-output name=isDevGroupExisted::$devRgExisted\n"
+        echo "::set-output name=isProdGroupExisted::$prodRgExisted\n"
+      
+    - name: create dev group if it deoes not exist
+      if: ! ${{steps.if_group_exists.output.isDevGroupExisted}}
+      run: |
+        az group create --location ${{env.AZURE_LOCATION}} --name dev-${{env.AZURE_RESOURCE_GROUP}} --subscription ${{secrets.AZURE_SUBSCRIPTION_ID}}
 
+    - name: create prod group if it deoes not exist
+      if: ! ${{steps.if_group_exists.output.isProdGroupExisted}}
+      run: |
+        az group create --location ${{env.AZURE_LOCATION}} --name prod-${{env.AZURE_RESOURCE_GROUP}} --subscription ${{secrets.AZURE_SUBSCRIPTION_ID}}
+        
       # Deploy Bicep file
-    - name: deploy
+    - name: deploy dev
       uses: azure/arm-deploy@v1
       with:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
         resourceGroupName: dev-${{env.AZURE_RESOURCE_GROUP}}
+        template: ./azuredeploy.bicep
+        parameters: storagePrefix=mystore
+
+    - name: deploy prod
+      uses: azure/arm-deploy@v1
+      with:
+        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+        resourceGroupName: prod-${{env.AZURE_RESOURCE_GROUP}}
         template: ./azuredeploy.bicep
         parameters: storagePrefix=mystore
