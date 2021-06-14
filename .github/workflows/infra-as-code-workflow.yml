@@ -38,6 +38,6 @@ jobs:
       with:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
         resourceGroupName: dev-${{env.AZURE_RESOURCE_GROUP}}
-        template: ../../infra/azuredeploy.bicep
+        template: ./infra/azuredeploy.bicep
         parameters: envprefix=dev anotherparam=test
 
