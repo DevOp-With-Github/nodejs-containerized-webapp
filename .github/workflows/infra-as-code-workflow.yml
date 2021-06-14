@@ -32,6 +32,8 @@ jobs:
         prodRgExisted=$(az group exists --name prod-${{env.AZURE_RESOURCE_GROUP}} --subscription ${{secrets.AZURE_SUBSCRIPTION_ID}})
         echo "::set-output name=isDevGroupExisted::$devRgExisted\n"
         echo "::set-output name=isProdGroupExisted::$prodRgExisted\n"
+        echo "dev group $devRgExisted"
+        echo "prod group $prodRgExisted"
       
     - name: create dev group if it deoes not exist
       if: ${{steps.if_group_exists.output.isDevGroupExisted == 'false' }}
