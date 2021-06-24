@@ -44,8 +44,8 @@ resource farm 'microsoft.web/serverFarms@2020-06-01' = {
   name: farmName
   location: location
   sku: {
-    name: 'F1'
-    tier: 'Free'
+    name: 'B1'
+    tier: 'Basic'
   }
   kind: 'linux'
   properties: {
