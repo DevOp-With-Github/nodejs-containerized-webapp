@@ -3,6 +3,9 @@
 name: Docket CI and deploy to Dev
 
 on:
+  push:
+    branches-ignore:
+      - main
   pull_request:
     paths-ignore: 
       - 'infra/**'
