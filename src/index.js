@@ -11,6 +11,8 @@ while (!p2 && p1 !== p2) {
     : 'Who is player 2?')
 }
 
+
+
 window.onload = () => {
   document.getElementById('p1Name').innerText = p1
   document.getElementById('p2Name').innerText = p2
